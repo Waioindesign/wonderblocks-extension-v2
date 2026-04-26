@@ -86,38 +86,13 @@ document.getElementById("captureBtn").addEventListener("click", async () => {
       return;
     }
 
-    try {
-      await chrome.tabs.sendMessage(dashboardTab.id, {
-        type: "WB_CAPTURE_V2",
-        destino: selectedDest,
-        dados,
-      });
-    } catch {
-      // Content script não estava no tab (extensão carregada com tab já aberto).
-      // Injeta o receiver e tenta novamente.
-      await chrome.scripting.executeScript({
-        target: { tabId: dashboardTab.id },
-        func: () => {
-          if (!window.__wbReceiverActive) {
-            window.__wbReceiverActive = true;
-            chrome.runtime.onMessage.addListener((message) => {
-              if (message?.type === "WB_CAPTURE_V2") {
-                window.dispatchEvent(
-                  new CustomEvent("wb-capture-v2", {
-                    detail: { destino: message.destino, dados: message.dados },
-                  })
-                );
-              }
-            });
-          }
-        },
-      });
-      await chrome.tabs.sendMessage(dashboardTab.id, {
-        type: "WB_CAPTURE_V2",
-        destino: selectedDest,
-        dados,
-      });
-    }
+    await chrome.scripting.executeScript({
+      target: { tabId: dashboardTab.id },
+      func: (payload) => {
+        window.postMessage(payload, "*");
+      },
+      args: [{ type: "WB_CAPTURE_V2", destino: selectedDest, dados }],
+    });
 
     showResult(dados, "Capturado!");
   } catch (e) {
