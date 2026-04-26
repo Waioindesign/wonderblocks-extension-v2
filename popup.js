@@ -97,7 +97,20 @@ document.getElementById("captureBtn").addEventListener("click", async () => {
       // Injeta o receiver e tenta novamente.
       await chrome.scripting.executeScript({
         target: { tabId: dashboardTab.id },
-        files: ["content-scripts/receiver.js"],
+        func: () => {
+          if (!window.__wbReceiverActive) {
+            window.__wbReceiverActive = true;
+            chrome.runtime.onMessage.addListener((message) => {
+              if (message?.type === "WB_CAPTURE_V2") {
+                window.dispatchEvent(
+                  new CustomEvent("wb-capture-v2", {
+                    detail: { destino: message.destino, dados: message.dados },
+                  })
+                );
+              }
+            });
+          }
+        },
       });
       await chrome.tabs.sendMessage(dashboardTab.id, {
         type: "WB_CAPTURE_V2",
