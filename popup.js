@@ -27,7 +27,47 @@ document.getElementById("captureBtn").addEventListener("click", async () => {
     try {
       const results = await chrome.scripting.executeScript({
         target: { tabId: activeTab.id },
-        files: ["content-scripts/extractor.js"],
+        func: () => {
+          const isAmazon = location.href.includes("amazon.com.br");
+          const isML = location.href.includes("mercadolivre.com.br");
+
+          if (isAmazon) {
+            const nome = document.getElementById("productTitle")?.innerText?.trim() || null;
+            const img_url =
+              document.getElementById("landingImage")?.src ||
+              document.getElementById("imgBlkFront")?.src ||
+              null;
+            const fracao = document.querySelector(".a-price-whole")?.innerText?.replace(/\D/g, "");
+            const centavos = document.querySelector(".a-price-fraction")?.innerText?.replace(/\D/g, "");
+            const preco_final = fracao ? parseFloat(fracao + "." + (centavos || "00")) : null;
+            const precoOrigEl = document.querySelector(".a-text-price .a-offscreen");
+            const preco_original = precoOrigEl
+              ? parseFloat(precoOrigEl.innerText.replace("R$", "").replace(".", "").replace(",", ".").trim())
+              : null;
+            return { nome, img_url, loja: "Amazon", preco_final, preco_original };
+          }
+
+          if (isML) {
+            const nome = document.querySelector(".ui-pdp-title")?.innerText?.trim() || null;
+            const img_url =
+              document.querySelector(".ui-pdp-image.ui-pdp-gallery__figure__image")?.src ||
+              document.querySelector(".ui-pdp-image")?.src ||
+              null;
+            const fracaoEl = document.querySelector(".andes-money-amount__fraction");
+            const preco_final = fracaoEl
+              ? parseFloat(fracaoEl.innerText.replace(/\./g, "").replace(",", "."))
+              : null;
+            const origEl = document.querySelector(
+              ".ui-pdp-price__original-value .andes-money-amount__fraction"
+            );
+            const preco_original = origEl
+              ? parseFloat(origEl.innerText.replace(/\./g, "").replace(",", "."))
+              : null;
+            return { nome, img_url, loja: "Mercado Livre", preco_final, preco_original };
+          }
+
+          return null;
+        },
       });
       dados = results[0]?.result;
     } catch (e) {
