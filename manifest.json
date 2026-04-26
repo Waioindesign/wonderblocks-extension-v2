@@ -7,7 +7,9 @@
   "host_permissions": [
     "https://www.amazon.com.br/*",
     "https://produto.mercadolivre.com.br/*",
-    "https://www.mercadolivre.com.br/*"
+    "https://www.mercadolivre.com.br/*",
+    "http://localhost:3000/*",
+    "https://wonderblocks-v2.vercel.app/*"
   ],
   "action": {
     "default_popup": "popup.html",
