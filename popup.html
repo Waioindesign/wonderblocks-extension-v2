@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wonderblocks Capture V2</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <span class="logo-wb">Wonderblocks</span>
+      <span class="logo-cap">Capture V2</span>
+    </header>
+
+    <main class="main">
+      <p class="label">Destino</p>
+      <div class="toggle-group">
+        <button class="toggle-btn active" data-dest="wonder-pop">Wonder POP</button>
+        <button class="toggle-btn" data-dest="wonder-baby">Wonder Baby</button>
+      </div>
+
+      <button id="captureBtn" class="capture-btn">Capturar produto</button>
+
+      <div id="resultArea" class="result-area hidden">
+        <div class="result-inner">
+          <img id="resultImg" class="result-img" src="" alt="Produto" />
+          <div class="result-info">
+            <p id="resultName" class="result-name"></p>
+            <p id="resultStore" class="result-store"></p>
+          </div>
+        </div>
+        <div id="resultBadge" class="badge"></div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      Abre o dashboard antes de capturar
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "Wonderblocks Capture V2",
+  "description": "Captura produtos da Amazon e ML para o Wonderblocks V2",
+  "version": "1.0",
+  "permissions": ["activeTab", "scripting", "tabs"],
+  "host_permissions": [
+    "https://www.amazon.com.br/*",
+    "https://produto.mercadolivre.com.br/*",
+    "https://www.mercadolivre.com.br/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://wonderblocks-v2.vercel.app/*",
+        "http://localhost:3000/*"
+      ],
+      "js": ["content-scripts/receiver.js"]
+    }
+  ]
+}
