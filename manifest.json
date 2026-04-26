@@ -9,6 +9,7 @@
     "https://produto.mercadolivre.com.br/*",
     "https://www.mercadolivre.com.br/*",
     "http://localhost:3000/*",
+    "https://localhost:3000/*",
     "https://wonderblocks-v2.vercel.app/*"
   ],
   "action": {
@@ -28,9 +29,11 @@
     {
       "matches": [
         "https://wonderblocks-v2.vercel.app/*",
-        "http://localhost:3000/*"
+        "http://localhost:3000/*",
+        "https://localhost:3000/*"
       ],
-      "js": ["content-scripts/receiver.js"]
+      "js": ["content-scripts/receiver.js"],
+      "run_at": "document_idle"
     }
   ]
 }
